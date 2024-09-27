@@ -3,141 +3,95 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Typing Test Game</title>
+    <title>All About Spiders</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             margin: 0;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            background: linear-gradient(135deg, #f9d423, #ff4e50);
+            padding: 0;
+            background: linear-gradient(135deg, #e0f7fa, #ffe0b2);
             color: #333;
+            text-align: center;
+        }
+        header {
+            background-color: #ffcc80;
+            padding: 20px;
+            border-bottom: 3px solid #ffa726;
         }
         h1 {
-            margin: 20px 0;
-            color: #fff;
+            color: #d84315;
         }
-        #text-to-type {
-            border: 2px solid #fff;
-            padding: 15px;
-            width: 80%;
-            margin: 20px 0;
-            font-size: 18px;
-            height: 100px;
-            overflow-y: auto;
-            background: rgba(255, 255, 255, 0.9);
+        section {
+            padding: 20px;
+            margin: 10px;
+            background: white;
             border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
-        #input {
-            width: 80%;
-            padding: 10px;
-            font-size: 16px;
-            border: 2px solid #fff;
-            border-radius: 5px;
-        }
-        #stats {
-            margin-top: 20px;
-            font-size: 20px;
-            color: #fff;
-        }
-        button {
-            padding: 10px 20px;
-            font-size: 16px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            background-color: #4CAF50;
-            color: white;
-            margin: 5px;
-        }
-        button:hover {
-            background-color: #45a049;
-        }
-        select {
-            padding: 10px;
-            font-size: 16px;
-            border-radius: 5px;
+        .fact {
             margin: 20px 0;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            margin: 10px 0;
+        }
+        footer {
+            background-color: #333;
+            color: white;
+            padding: 10px;
+            position: relative;
+            bottom: 0;
+            width: 100%;
+        }
+        .gallery {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .gallery img {
+            width: 200px;
+            margin: 10px;
         }
     </style>
 </head>
 <body>
 
-<h1>Typing Test Game</h1>
+<header>
+    <h1>All About Spiders</h1>
+</header>
 
-<select id="mode-select">
-    <option value="easy">Easy</option>
-    <option value="medium">Medium</option>
-    <option value="hard">Hard</option>
-</select>
+<section id="introduction">
+    <h2>Introduction to Spiders</h2>
+    <p>Spiders are fascinating creatures that belong to the class Arachnida. They are found in various environments around the world and play crucial roles in our ecosystems.</p>
+</section>
 
-<div id="text-to-type">
-    <p id="paragraph">Select a game mode to start typing!</p>
-</div>
+<section id="facts">
+    <h2>Interesting Facts</h2>
+    <div class="fact">
+        <strong>1. Spiders have eight legs!</strong>
+        <p>Unlike insects, which have six legs, spiders have eight legs, which help them move quickly and capture prey.</p>
+    </div>
+    <div class="fact">
+        <strong>2. They produce silk!</strong>
+        <p>Spiders can produce silk from special glands, which they use to create webs, catch prey, and make shelters.</p>
+    </div>
+    <div class="fact">
+        <strong>3. Not all spiders spin webs!</strong>
+        <p>Some spiders, like the jumping spider, do not spin webs. Instead, they hunt their prey directly.</p>
+    </div>
+    <div class="fact">
+        <strong>4. They can eat insects!</strong>
+        <p>Spiders are carnivorous and primarily feed on insects, helping control pest populations.</p>
+    </div>
+    <div class="fact">
+        <strong>5. Some can be quite large!</strong>
+        <p>The Goliath Birdeater is the largest spider in the world, with a leg span of up to 12 inches!</p>
+    </div>
+</section>
 
-<input type="text" id="input" placeholder="Start typing here..." autofocus />
-<div id="stats"></div>
-<button id="reset">Reset</button>
-
-<script>
-    const input = document.getElementById('input');
-    const textToType = document.getElementById('text-to-type');
-    const stats = document.getElementById('stats');
-    const modeSelect = document.getElementById('mode-select');
-    let startTime, interval;
-
-    const paragraphs = {
-        easy: "The quick brown fox jumps over the lazy dog.",
-        medium: "A journey of a thousand miles begins with a single step.",
-        hard: "In the middle of difficulty lies opportunity. - Albert Einstein"
-    };
-
-    modeSelect.addEventListener('change', setParagraph);
-    input.addEventListener('focus', startTest);
-
-    function setParagraph() {
-        const mode = modeSelect.value;
-        textToType.innerHTML = paragraphs[mode];
-        resetTest();
-    }
-
-    function resetTest() {
-        input.value = '';
-        stats.innerText = '';
-        startTime = null;
-        clearInterval(interval);
-        input.removeEventListener('input', checkInput);
-    }
-
-    function startTest() {
-        if (!textToType.innerText.trim()) return;
-        input.value = '';
-        stats.innerText = '';
-        startTime = null;
-        clearInterval(interval);
-        input.addEventListener('input', checkInput);
-    }
-
-    function checkInput() {
-        if (!startTime) {
-            startTime = new Date();
-            interval = setInterval(updateStats, 1000);
-        }
-
-        if (input.value === textToType.innerText) {
-            clearInterval(interval);
-            stats.innerText = `Well done! Your WPM: ${calculateWPM()} words per minute.`;
-            input.removeEventListener('input', checkInput);
-        }
-    }
-
-    function updateStats() {
-        const elapsedTime = (new Date() - startTime) / 1000; // in seconds
-        const wordsTyped = input.value.split(/\s+/).filter(word => word).length;
-        stats.innerText = `Time: ${Math.floor(elapsedTime)}s | Words Typed: ${wordsTyped}`;
-    }
-
-    function calculateWPM() {
-        const to
+<section id="gallery">
+    <h2>Spider Gallery</h2>
+    <div class="gallery">
+        <img src="https://example.com/spider1.jpg" alt
