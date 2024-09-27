@@ -3,66 +3,116 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Typing Test</title>
+    <title>Typing Test Game</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             margin: 0;
-            padding: 0;
+            padding: 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            background-color: #f4f4f4;
+            background: linear-gradient(135deg, #f9d423, #ff4e50);
             color: #333;
         }
         h1 {
-            margin-top: 20px;
+            margin: 20px 0;
+            color: #fff;
         }
         #text-to-type {
-            border: 1px solid #ccc;
-            padding: 10px;
+            border: 2px solid #fff;
+            padding: 15px;
             width: 80%;
             margin: 20px 0;
-            font-size: 16px;
+            font-size: 18px;
             height: 100px;
             overflow-y: auto;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
         }
         #input {
             width: 80%;
             padding: 10px;
             font-size: 16px;
-            border: 1px solid #ccc;
+            border: 2px solid #fff;
+            border-radius: 5px;
         }
         #stats {
             margin-top: 20px;
-            font-size: 18px;
+            font-size: 20px;
+            color: #fff;
         }
         button {
             padding: 10px 20px;
             font-size: 16px;
+            border: none;
+            border-radius: 5px;
             cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            margin: 5px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        select {
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 5px;
+            margin: 20px 0;
         }
     </style>
 </head>
 <body>
 
-<h1>Typing Test</h1>
+<h1>Typing Test Game</h1>
+
+<select id="mode-select">
+    <option value="easy">Easy</option>
+    <option value="medium">Medium</option>
+    <option value="hard">Hard</option>
+</select>
+
 <div id="text-to-type">
-    The quick brown fox jumps over the lazy dog. Type this paragraph as quickly and accurately as you can!
+    <p id="paragraph">Select a game mode to start typing!</p>
 </div>
+
 <input type="text" id="input" placeholder="Start typing here..." autofocus />
 <div id="stats"></div>
 <button id="reset">Reset</button>
 
 <script>
     const input = document.getElementById('input');
-    const textToType = document.getElementById('text-to-type').innerText;
+    const textToType = document.getElementById('text-to-type');
     const stats = document.getElementById('stats');
+    const modeSelect = document.getElementById('mode-select');
     let startTime, interval;
 
+    const paragraphs = {
+        easy: "The quick brown fox jumps over the lazy dog.",
+        medium: "A journey of a thousand miles begins with a single step.",
+        hard: "In the middle of difficulty lies opportunity. - Albert Einstein"
+    };
+
+    modeSelect.addEventListener('change', setParagraph);
     input.addEventListener('focus', startTest);
 
+    function setParagraph() {
+        const mode = modeSelect.value;
+        textToType.innerHTML = paragraphs[mode];
+        resetTest();
+    }
+
+    function resetTest() {
+        input.value = '';
+        stats.innerText = '';
+        startTime = null;
+        clearInterval(interval);
+        input.removeEventListener('input', checkInput);
+    }
+
     function startTest() {
+        if (!textToType.innerText.trim()) return;
         input.value = '';
         stats.innerText = '';
         startTime = null;
@@ -76,7 +126,7 @@
             interval = setInterval(updateStats, 1000);
         }
 
-        if (input.value === textToType) {
+        if (input.value === textToType.innerText) {
             clearInterval(interval);
             stats.innerText = `Well done! Your WPM: ${calculateWPM()} words per minute.`;
             input.removeEventListener('input', checkInput);
@@ -90,19 +140,4 @@
     }
 
     function calculateWPM() {
-        const totalTimeInMinutes = (new Date() - startTime) / (1000 * 60);
-        const wordsTyped = input.value.split(/\s+/).filter(word => word).length;
-        return Math.round(wordsTyped / totalTimeInMinutes);
-    }
-
-    document.getElementById('reset').addEventListener('click', () => {
-        input.value = '';
-        stats.innerText = '';
-        startTime = null;
-        clearInterval(interval);
-        input.removeEventListener('input', checkInput);
-    });
-</script>
-
-</body>
-</html>
+        const to
